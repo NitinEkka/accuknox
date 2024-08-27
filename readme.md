@@ -1,4 +1,6 @@
-# Docker Commands for installing
+# Install docker in your system
+
+# Docker Commands for installing django app
 
 1 - sudo docker build -t socialapp .
 

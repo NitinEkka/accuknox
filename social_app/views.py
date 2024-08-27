@@ -1,4 +1,5 @@
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -12,9 +13,11 @@ from datetime import timedelta
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
-
-
+'''
+API for registration
+'''
 class RegisterAPIView(APIView):
+    @csrf_exempt
     def post(self, request, *args, **kwargs):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
@@ -22,7 +25,9 @@ class RegisterAPIView(APIView):
             return Response({"message": "User registered successfully."}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+'''
+API for login
+'''
 class LoginAPIView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = LoginSerializer(data=request.data, context={'request': request})
@@ -32,6 +37,9 @@ class LoginAPIView(APIView):
 
         return Response({"token": "Login successful"}, status=status.HTTP_200_OK)
 
+'''
+API for logout
+'''
 class LogoutAPI(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):
@@ -41,6 +49,9 @@ class LogoutAPI(APIView):
         except Exception as error:
             return Response({"message": str(error)}, status=status.HTTP_400_BAD_REQUEST) 
 
+'''
+API for searching users with either email or username
+'''
 class UserSearchView(ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
@@ -70,6 +81,9 @@ class UserSearchView(ListAPIView):
         return Response(serializer.data)
         
 
+'''
+API for sending ,accepting and removing friend requests
+'''
 class FriendRequestAPIView(CreateAPIView,UpdateAPIView,DestroyAPIView):
     serializer_class = FriendRequestSerializer
     permission_classes = [IsAuthenticated]
@@ -122,6 +136,9 @@ class FriendRequestAPIView(CreateAPIView,UpdateAPIView,DestroyAPIView):
         return Response({"message": "Friend request removed."}, status=status.HTTP_204_NO_CONTENT)
 
 
+'''
+API for getting accepted and pending requests
+'''
 class FriendRequestsStatusAPIView(ListAPIView):
     serializer_class = FriendRequestSerializer
     permission_classes = [IsAuthenticated]
