@@ -16,4 +16,4 @@ https://app.getpostman.com/join-team?invite_code=a46465ce1426a06bad3aa609dd0cdae
 
 # Github link
 
-https://github.com/NitinEkka/accunox
+https://github.com/NitinEkka/accuknox
